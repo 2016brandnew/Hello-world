@@ -1,0 +1,94 @@
+class Stack:
+    def __init__(self):
+        self.items = []
+
+    def is_empty(self):
+        return not self.items
+    
+    def push(self, item):
+        self.items.append(item)
+
+    def pop(self):
+        return self.items.pop()
+
+    def peek(self):
+        if self.items:
+            return self.items[-1]
+list1 = ['+','-','*','/']
+    
+def prior(i):
+   if i == '*' or i == '/':
+       return 2
+   elif i == "+" or i == "-":
+       return 1
+   else:
+       return 0
+
+def infix_to_postfix(str):
+    stack = Stack()
+    ret = []
+    tokens = str.split(" ")
+    for i in tokens:
+        if i in list1 :
+            line = prior(i)    
+            b = stack.peek()
+            instack = prior(b)
+            if instack >= line:
+                topstack = stack.pop()
+                ret.append(topstack)
+                stack.push(i)
+            else:
+                stack.push(i)
+        elif i == '(':
+            stack.push(i)
+        elif i == ')':
+            while stack.peek() != '(':
+                w = stack.pop()
+                ret.append(w)
+            stack.pop()
+        else:    
+            ret.append(i)
+    while stack.is_empty:
+        if stack.peek() == None:
+            break
+        a = stack.pop()
+        ret.append(a)
+    return " ".join(ret)
+
+
+def eval_postfix(str):
+    stack = Stack()
+    tokens = str.split(" ")
+    
+    for i in tokens:
+        if i in list1:
+            a = stack.pop()
+            b = stack.pop()
+            if i == "+":
+                c = float(a) + float(b)
+                stack.push(c)
+            elif i == "-":
+                c = float(b) - float(a)
+                stack.push(c)
+            elif i == "*":
+                c = float(a) * float(b)
+                stack.push(c)
+            elif i == "/":
+                c = float(b) / float(a)
+                stack.push(c)
+        else:
+            stack.push(i)
+    b = stack.pop()
+    return b
+
+def expr_test(infix):
+    postfix = infix_to_postfix(infix)
+    result = eval_postfix(postfix)
+    print("'%s' => '%s' = %f" % (infix, postfix, result))
+
+
+if __name__ == '__main__':
+    expr_test("4 + 3 - 2")
+    expr_test("4 + 3 - 4 / 2")
+    expr_test("1 + 2 * 3 - 4 * ( 2 / ( 4 - ( 5 + 2 ) ) )")
+    expr_test("( 1 + 2 ) * 3 - 4 * ( 2 / ( 4 - ( 5 + 2 ) ) )")
