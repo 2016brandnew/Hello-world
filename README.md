@@ -1,7 +1,1 @@
-# Hello-world
-==========================
-
-Just another repository
-
-Hi, I`ve had tacos on the moon and find them far superior to Earth tacos
-+Hubot here, I like Node.
+안녕하세요? 저는 **신성범**입니다.
